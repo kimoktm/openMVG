@@ -121,6 +121,38 @@ struct Frustum : public HalfPlaneObject
   */
   bool isTruncated() const;
 
+  // /**
+  // * @brief Test if two frustums intersect
+  // * A prior radial check for speed up
+  // * @retval true If an non-empty intersection exists
+  // * @retval false If there is no intersection
+  // */
+  // bool intersect(const Frustum & rhs) const
+  // {
+  //   // std::cout << "Intersecting with frustum" << std::endl;
+  //   if (this->isTruncated() && rhs.isTruncated())
+  //   {
+  //     const Vec3& frustumA_center = this->cones[0];
+  //     const Vec3& frustumB_center = rhs.cones[0];
+  //     // edge from center to outer face
+  //     const double frustumA_edge = (this->points.back() - frustumA_center).norm();
+  //     const double frustumB_edge = (rhs.points.back() - frustumB_center).norm();
+  //     const double frustums_distance = (frustumB_center - frustumA_center).norm();
+
+  //     if (frustums_distance > frustumA_edge + frustumB_edge)
+  //     {
+  //       return false;
+  //     }
+  //   }
+
+  //   return HalfPlaneObject::intersect(rhs);
+  // }
+
+  // bool intersect(const HalfPlaneObject & rhs) const
+  // {
+  //   return HalfPlaneObject::intersect(rhs);
+  // }
+
   /**
   * @brief Return the supporting frustum points
   * @return Supporting frustum points

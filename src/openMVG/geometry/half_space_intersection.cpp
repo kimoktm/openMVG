@@ -96,20 +96,27 @@ bool intersect
   const std::vector<HalfPlaneObject> & hplanes
 )
 {
-  // Compute the total number of half-planes
-  std::size_t s = 0;
-  std::for_each(hplanes.cbegin(), hplanes.cend(),
-                [&s](const HalfPlaneObject & hp) { s += hp.planes.size(); });
+  for (size_t i = 0; i < hplanes.size(); i++)
+    for (size_t j = i + 1; j < hplanes.size(); j++)
+      if (hplanes[i].intersect(hplanes[j]))
+        return true;
 
-  // Concatenate the half-planes and see if an intersection exists
-  Half_planes vec_planes;
-  vec_planes.reserve(s);
-  for (const HalfPlaneObject & hp : hplanes)
-  {
-    vec_planes.insert(vec_planes.end(), hp.planes.cbegin(), hp.planes.cend());
-  }
+  return false;  
 
-  return halfPlane::isNotEmpty(vec_planes);
+  // // Compute the total number of half-planes
+  // std::size_t s = 0;
+  // std::for_each(hplanes.cbegin(), hplanes.cend(),
+  //               [&s](const HalfPlaneObject & hp) { s += hp.planes.size(); });
+
+  // // Concatenate the half-planes and see if an intersection exists
+  // Half_planes vec_planes;
+  // vec_planes.reserve(s);
+  // for (const HalfPlaneObject & hp : hplanes)
+  // {
+  //   vec_planes.insert(vec_planes.end(), hp.planes.cbegin(), hp.planes.cend());
+  // }
+
+  // return halfPlane::isNotEmpty(vec_planes);
 }
 
 } // namespace halfPlane

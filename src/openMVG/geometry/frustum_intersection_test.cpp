@@ -23,6 +23,42 @@ using namespace openMVG::geometry;
 using namespace openMVG::geometry::halfPlane;
 using namespace std;
 
+
+TEST(frustum, vec_intersection)
+{
+  const int focal = 1000;
+  const int principal_Point = 500;
+  //-- Setup a circular camera rig or "cardioid".
+  const int iNviews = 15000;
+  const int iNbPoints = 40000;
+  const NViewDataSet d =
+    NRealisticCamerasRing(
+    iNviews, iNbPoints,
+    nViewDatasetConfigurator(focal, focal, principal_Point, principal_Point, 5, 0));
+
+
+  d.ExportToPLY("/Users/karim/Desktop/poses.ply");
+
+  // Test with infinite Frustum for each camera
+  {
+    std::vector<Frustum> vec_frustum;
+    for (int i=0; i < iNviews; ++i)
+    {
+      vec_frustum.push_back(
+        Frustum(principal_Point*2, principal_Point*2, d._K[i], d._R[i], d._C[i]));
+      EXPECT_TRUE(vec_frustum[i].isInfinite());
+    }
+
+
+    std::vector<HalfPlaneObject> objects;
+    for(const auto&f : vec_frustum)
+      objects.push_back(f);
+
+    // Check that frustums have an overlap
+    EXPECT_TRUE(intersect(objects));
+  }
+}
+
 //--
 // Camera frustum intersection unit test
 //--
